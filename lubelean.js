@@ -10,7 +10,6 @@ var Parser = function (src) {
   this.li = 1;
   this.startStmt = false;
   this.foundStmt = false;
-  this.foundExpr = false ; 
 
   this. ltval = null;
   this. lttype= "";
@@ -26,34 +25,16 @@ var Parser = function (src) {
 
 var _c = function (c) { return c.charCodeAt(0); };
 
-var _1 = _c ( '1' ),
-    _2 = _c ( '2' ),
-    _3 = _c ( '3' ) ,
-    _4 = _c ( '4'   ) ,
-    _5 = _c ( '5' ),
-    _6 = _c ( '6' ),
-    _7 = _c ( '7' ) ,
-    _8 = _c ( '8' ),
+var 
+   
     _9 = _c('9'),
     _a = _c('a'),
     _0 = _c('0'), _z = _c('z'),
-    _A = _c('A'), __ = _c('_'), _$ = _c('$'), _Z = _c('Z'),
-    _2 = _c('2'), _8 = _c('8'), _sq = _c('\''), _lf = _c('\n'),
-    _dq = _c('"'), _mul = _c('*'), _ws = _c(' '), _tab = _c('\t'),
-    _cret = _c('\r'), _parO = _c('('), _parC = _c(')'), _sbrO = _c('['),
-    _sbrC = _c(']'), _cubO = _c('{'), _cubC = _c('}'), _less = _c('<'),
-    _grea = _c('>'), _semi = _c(';'), _com = _c(','),
-    _dot = _c('.'), _and = _c('&'), _tick = _c('`'), _mod = _c(('%')),
-    _xor = _c('^'), _eq = _c(('=')), _exc = _c('!'), _comp = _c('~'),
-    _or = _c('|'), _ats = _c(' '), _min = _c(('-')), _ques = _c('?'),
-    _col = _c((':')), _div = _c('/'), _bs = _c(('\\')), _add = _c(('+')),
-    _F = _c('F'), _u = _c('u'), _O = _c('O'), _E = _c('E'),
-    _x = _c('x'), _X = _c('X'), _b = _c('b'), _B = _c('B'),
-    _f = _c('f'), _U = _c('U'), _o = _c('o'), _e = _c('e'),
-    _v = _c('v'),
-    _r = _c('r'),
-    _n = _c('n'),
-    _t = _c('t');
+    _A = _c('A'), __ = _c('_'), _$ = _c('$'), _Z = _c('Z'), _lf = _c('\n'),
+    _mul = _c('*'), _ws = _c(' '),
+    _cret = _c('\r'),
+    _and = _c('&'), _mod = _c(('%')),
+   _min = _c(('-'));
 
 var cfFor = 2, cfShortNotValid = 8 , cfNonAssigNotValid = 1, METHD = 1 << 4, cfY = 1 << 8 ;
 var cfExpectHeadBePrim = ((1) << ((5))), CFLAGS_PTRN_MEM = cfShortNotValid|cfNonAssigNotValid ; 
@@ -98,65 +79,20 @@ lp.nextraw = function () {
   else if (Num(peek))this.readNumberLiteral(peek);
   else { 
     switch (peek) {
-      case _dq: case _sq: return this.readStrLiteral(peek);
-      case _min:
-      case _add: this.opAddMin(peek) ; break;
-      case _dot: this.readDot () ; break ;
-      case _eq:  this.opEq () ;   break ; 
-      case _less: this.opLess() ;   break ;
-      case _grea: this.opGrea() ;   break ;
-      case _mul: if ( l.charCodeAt(c+1) == peek) c++ ; 
+      case _min: this.opAddMin(peek) ; break;
+      case _mul:  
       case _mod: 
          c++ ;
-         if ( l.charCodeAt(c) == _eq) { c ++ ; this.lttype = '=' ;  }
-         else {  this.  prec = 0xAD; this.  lttype = 'op'; } 
+           this.  prec = 0xAD; this.  lttype = 'op'; 
          this.ltcontents = l.slice(this.c,c)  ; 
-         this.c=c;
-         break ;
-
-      case _exc:
-         c++ ;
-         if ( l.charCodeAt ( c ) == _eq ) {
-           this. prec = 0x5D ;
-           this. lttype = 'op';  
-           c ++ ;
-           if ( l.charCodeAt (c) == _eq ) { this.ltcontents = '!==';  c ++ ; }
-           else this.ltcontents = '!=' ;
-         }
-         else { this.ltcontents = this.lttype = '!' ; }
-         this.c=c;
-         break ;
-                                    
-      case _comp:
-            c++ ; this.c=c; this.lttype = this.ltcontents = '~' ; break ; 
-
-      case _or:
-         c++ ; 
-         switch ( l.charCodeAt ( c ) ) {
-            case _eq : c ++ ; this. lttype = '=' ; this.ltcontents = '|=' ; break ;
-            case _or : c ++ ; this. ltcontents = '||' ; this. lttype = 'op'; this. prec = ( 0x09 ) ; break ; 
-            default : this. lttype = 'op'; this.  prec = 0x0D ; this. ltcontents = '|'; break ;
-         }
          this.c=c;
          break ;
 
       case _and:
           c++ ;
-          switch ( l.charCodeAt ( c ) ) {
-            case _eq : c ++ ; this.lttype = '='  ; this.ltcontents = '&=' ;  break ;
-            case _and : c ++; this.ltcontents = '&&' ; this.lttype = 'op' ;  this. prec = 0x0B ;  break ;
-            default : this.  lttype = 'op' ; this. prec =  0x01D;  this.ltcontents = '&' ;  break ;
-         }
+             this.  lttype = 'op' ; this. prec =  0x01D;  this.ltcontents = '&' ;
          this.c=c;
          break ;
-
-      case _xor:
-        c++;
-        if ( l.charCodeAt(c ) == _eq ) {  c++ ;   this. lttype = '='  ;  }
-        else  { this.  prec = 0x01B ;  this.lttype = 'op' ; } 
-        this.ltcontents = l.slice(this.c,c)  ;
-        this.c=c  ;
-        break; 
 
       default:
 
@@ -171,65 +107,13 @@ lp . opAddMin = function(peek) {
         var c = this.c, assig = false, l = this.src ;
         c++ ;
         var r = l.charCodeAt ( c ) ;
-        if ( r == _eq ) { c ++ ; assig = !false;   }
-        else if ( r == peek ){ c ++ ;  }
         this.ltcontents = this.src.slice(this.c,c)  ;
         this.lttype = assig ? '=' : this.ltcontents ;
         this.c=c;
         this.prec= 0xA7 ; 
 }
 
-lp . opEq = function()  {
-    var c = this.c, assig = false ,  l = this.src ;  
-    c++ ;
-    if ( l.charCodeAt(c ) == _eq ) {
-      c++ ;
-      if ( l.charCodeAt(c ) == _eq ) c++ ;
-      this.lttype = 'op';
-      this.prec = 0x5D  ;
-    }
-    else {
-        if ( l.charCodeAt ( c ) == _grea ) c++ ; 
-        this.lttype = '=' ;
-    }
-    this.ltcontents = l.slice(this.c,c)  ;
-    this.c=c;
-}
 
-lp . opLess = function () {
-  var c = this.c, l = this.src;
-  c++ ;
-  if ( l.charCodeAt(c ) == _less ) {
-     c++ ;
-     if ( l.charCodeAt(c ) == _eq ) { c++ ; this. lttype = '=' ; } 
-     else { this. lttype= 'op' ; this. prec=0xA5;  } 
-  }
-  else  {
-     if ( l.charCodeAt ( c ) == _eq )  c++ ;
-     this. prec = 0x9B; 
-     this. lttype='op';
-  }
-  this.ltcontents = l.slice(this.c,c)  ;
-  this.c=c; 
-}
-
-lp . opGrea = function()   {
-  var c = this.c, l = this.src;
-  c++ ;
-  if ( l.charCodeAt(c ) == _grea ) {
-    c++ ;
-    if ( l.charCodeAt ( c ) == _grea ) c++ ;
-    if ( l.charCodeAt(c ) == _eq ) { c++ ;this. lttype = '='   ; } 
-    else { this.lttype = 'op'; this. prec= 0xA5; } ;
-  }
-  else  {
-    if ( l.charCodeAt ( c ) == _eq ) c++ ;
-    this.lttype =  'op' ;   
-    this. prec= 0x9B ; 
-  }
-  this.ltcontents = l.slice(this.c,c)  ;
-  this.c=c; 
-}
 
  
 lp.skipS = function() {
@@ -244,66 +128,7 @@ lp.skipS = function() {
          case _ws :
              while ( ++c < e &&  l.charCodeAt (  c ) == _ws );
              continue ;
-         case _cret : if ( _lf == l.charCodeAt ( c + 1 ) ) c ++ ; 
-         case _lf :
-            if ( noNewLine ) noNewLine = false ; 
-            start = ++ c ;
-            this.li ++ ; 
-            this.col = ( 0)
-            continue ;
-            
-         case _tab: c++ ; continue ;
-         case _div:
-             switch ( l.charCodeAt ( c + ( 1) ) ) {
-                 case _div:
-                     c ++ ;
-                     this.c=c;
-                     this.readCmntl () ;
-                     if ( noNewLine ) noNewLine = false ;
-                     start = c = this.c ;
-                     continue ;
-
-                 case _eq:
-                   c ++ ;
-                   this. hasL = ! noNewLine ;
-                   this.col += (c-start ) ;
-                   this.c=c;
-                   this  .   ltcontents =  '/' ;
-                   this. lttype    =    '='    ;
-                   return !false; 
-
-                 case _mul:
-                   c +=  2 ;
-                   this.col += (c-start ) ;
-                   this.c = c ;
-                   noNewLine = this. readCmntm () && noNewLine ;
-                   start = c = this.c ;
-                   continue ;
-
-                 default:
-                     c++ ; 
-                     this.hasL = ! noNewLine ;
-                     this.col += (c-start ) ;
-                     this.c=c ; 
-                     this.prec  = 0xAD ; 
-                     this.lttype =  '/';
-                     this.ltcontents = '/' ;
-                     return !false; 
-             }
-
-         case 0x0020:case 0x00A0:case 0x1680:case 0x2000:
-         case 0x2001:case 0x2002:case 0x2003:case 0x2004:
-         case 0x2005:case 0x2006:case 0x2007:case 0x2008:
-         case 0x2009:case 0x200A:case 0x202F:case 0x205F:
-         case 0x3000: c ++ ; continue ;
-
-         case 0x2028:
-         case 0x2029: 
-            if ( noNewLine ) noNewLine = false ;
-            start = ++c ;
-            this.col = 0 ;
-            this.li ++ ;
-            continue; 
+           
 
          default :
             this.col += (c-start ) ;
@@ -463,23 +288,6 @@ lp.parseExpr = function ( head, cf ) {
     0,
     cf
   );
-  var n;
-  if ( this.lttype == ',' ) {
-    var e = [core(head)  ] ;
-    do {
-      this.next() ;
-      n = this.parseNonSeqExpr( this. parseExprHeadOrYield(cf), 0, cf );
-      e.push(core(n) ); 
-    } while (this.lttype == ',' ) ;
-
-    return  {
-         type : 'SequenceExpression',
-         expressions : e ,
-        start :  head.start ,
-          end :  n.end                             , 
-         loc: { start : head.loc.start, end : n.loc.end }
-    } 
-  }
 
   return head ;
 };
@@ -496,8 +304,6 @@ lp.parseNonSeqExpr = function (head, breakIfLessThanThis , cFlags_For ) {
   while (!false) {
     switch (this.lttype) {
 
-      case '/' :
-      case '+' :
       case '-' :
       case 'op' :
          prec = this . prec;
